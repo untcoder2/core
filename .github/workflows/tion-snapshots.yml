@@ -1,0 +1,37 @@
+name: Generate ntq tuya snapshots
+
+on:
+  push:
+    branches: [tion-ci-helper]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tion-breezer-4s-support
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . -r requirements_test.txt -r requirements_test_all.txt -e packages/pytest-homeassistant
+      - name: Regenerate tuya snapshots
+        run: |
+          python -m pytest tests/components/tuya/test_switch.py tests/components/tuya/test_sensor.py tests/components/tuya/test_init.py --snapshot-update -q
+      - name: Commit and push updated snapshots
+        run: |
+          git config user.name "untcoder2"
+          git config user.email "untcoder2@users.noreply.github.com"
+          git add tests/components/tuya/snapshots/
+          git diff --cached --stat
+          git commit -m "Update tuya snapshots for ntq device support" || echo "nothing to commit"
+          git push origin tion-breezer-4s-support
