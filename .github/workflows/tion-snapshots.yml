@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e . -r requirements_test.txt -r requirements_test_all.txt -e packages/pytest-homeassistant
+          pip install -e . -r requirements_test.txt -r requirements_all.txt -e packages/pytest-homeassistant
       - name: Regenerate tuya snapshots
         run: |
           python -m pytest tests/components/tuya/test_switch.py tests/components/tuya/test_sensor.py tests/components/tuya/test_init.py --snapshot-update -q
