@@ -31,7 +31,7 @@ jobs:
           python -m script.translations develop --all
       - name: Regenerate tuya snapshots
         run: |
-          python -m pytest tests/components/tuya/test_switch.py tests/components/tuya/test_sensor.py tests/components/tuya/test_init.py --snapshot-update -q
+          python -m pytest tests/components/tuya/test_fan.py tests/components/tuya/test_switch.py tests/components/tuya/test_sensor.py tests/components/tuya/test_init.py --snapshot-update -q
       - name: Commit and push updated snapshots
         run: |
           git config user.name "untcoder2"
